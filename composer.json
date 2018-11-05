@@ -1,5 +1,12 @@
 {
-    "require": {
-        "mfacenet/hello-world": "v1.*"
-    }
+    
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        },
+        {   
+            "packagist": false 
+        }
+    ]
 }

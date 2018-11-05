@@ -16,35 +16,34 @@ RUN apt-get update \
     && apt-get autoremove
  
 
-# RUN curl -sS https://getcomposer.org/installer | php \
-#     && mv composer.phar /usr/local/bin/composer \
-#     && composer self-update --clean-backups
-#     #&& composer config -g repositories.packagist composer https://packagist.phpcomposer.com
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer self-update --clean-backups
  
 
-# RUN wget https://github.com/swoole/swoole-src/archive/v2.1.3.tar.gz -O swoole.tar.gz \
-#     && mkdir -p swoole \
-#     && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
-#     && rm swoole.tar.gz \
-#     && ( \
-#         cd swoole \
-#         && phpize \
-#         && ./configure --enable-async-redis --enable-mysqlnd --enable-coroutine --enable-openssl --enable-http2 \
-#         && make -j$(nproc) \
-#         && make install \
-#     ) \
-#     && rm -r swoole \
-#     && docker-php-ext-enable swoole
+RUN wget https://github.com/swoole/swoole-src/archive/v4.2.5.tar.gz -O swoole.tar.gz \
+    && mkdir -p swoole \
+    && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
+    && rm swoole.tar.gz \
+    && ( \
+        cd swoole \
+        && phpize \
+        && ./configure --enable-coroutine --enable-openssl --enable-http2 \
+        && make -j$(nproc) \
+        && make install \
+    ) \
+    && rm -r swoole \
+    && docker-php-ext-enable swoole
  
-# ADD . /var/www/easyswoole
-# WORKDIR /var/www/easyswoole
+ADD . /var/www/easyswoole
+WORKDIR /var/www/easyswoole
  
-# RUN composer install --no-dev\
-#     && composer dump-autoload -o \
-#     && composer clearcache
+RUN composer install --no-dev\
+    && composer dump-autoload -o \
+    && composer clearcache
  
-# RUN php bin/easyswoole install
+RUN php bin/easyswoole install
  
-# EXPOSE 80
+EXPOSE 80
  
-# CMD ["php", "/var/www/easyswoole/bin/easyswoole", "start", "-d"]
+CMD ["php", "/var/www/easyswoole/bin/easyswoole", "start", "-d"]
