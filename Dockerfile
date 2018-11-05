@@ -41,9 +41,7 @@ WORKDIR /var/www/easyswoole
 RUN composer install --no-dev\
     && composer dump-autoload -o \
     && composer clearcache
+
+EXPOSE 9501
  
-RUN php bin/easyswoole install
- 
-EXPOSE 80
- 
-CMD ["php", "/var/www/easyswoole/bin/easyswoole", "start", "-d"]
+CMD ["php", "/var/www/easyswoole/easyswoole", "start", "-d"]
