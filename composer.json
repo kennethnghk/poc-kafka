@@ -13,9 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
-        "easyswoole/easyswoole": "2.x-dev",
-        "easyswoole/swoole-ide-helper": "^1.03"
+        "php": ">=7.1.0"
     },
     "require-dev": {
         "composer/composer": "^1.6"

@@ -35,13 +35,9 @@ RUN wget https://github.com/swoole/swoole-src/archive/v4.2.5.tar.gz -O swoole.ta
     && rm -r swoole \
     && docker-php-ext-enable swoole
  
-ADD . /var/www/easyswoole
-WORKDIR /var/www/easyswoole
+ADD . /var/www/app
+WORKDIR /var/www/app
  
 RUN composer install --no-dev\
     && composer dump-autoload -o \
     && composer clearcache
-
-EXPOSE 9501
- 
-CMD ["php", "/var/www/easyswoole/easyswoole", "start", "-d"]
