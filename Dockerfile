@@ -41,3 +41,5 @@ WORKDIR /var/www/app
 RUN composer install --no-dev\
     && composer dump-autoload -o \
     && composer clearcache
+
+EXPOSE 1215
