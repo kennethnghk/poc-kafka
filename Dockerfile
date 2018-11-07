@@ -12,6 +12,8 @@ RUN apt-get update \
         libz-dev \
         libssl-dev \
         libnghttp2-dev \
+        telnet \
+        iputils-ping \
     && apt-get clean \
     && apt-get autoremove
  
@@ -45,6 +47,6 @@ RUN composer install --no-dev\
 ENV SWOOLE_HTTP_PORT 80
 ENV SWOOLE_HTTP_HOST "0.0.0.0"
 
-ENTRYPOINT php artisan swoole:http start
+#ENTRYPOINT php artisan swoole:http start
 
 EXPOSE 80
