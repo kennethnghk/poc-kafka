@@ -42,4 +42,9 @@ RUN composer install --no-dev\
     && composer dump-autoload -o \
     && composer clearcache
 
-EXPOSE 1215
+ENV SWOOLE_HTTP_PORT 80
+ENV SWOOLE_HTTP_HOST "0.0.0.0"
+
+ENTRYPOINT php artisan swoole:http start
+
+EXPOSE 80

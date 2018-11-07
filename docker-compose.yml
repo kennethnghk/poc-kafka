@@ -27,4 +27,4 @@ services:
   webapp:
     build: .
     ports:
-      - "1215:1215"
+      - "80:80"
