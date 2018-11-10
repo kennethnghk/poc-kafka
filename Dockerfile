@@ -45,10 +45,20 @@ RUN git clone https://github.com/edenhill/librdkafka.git \
 
 RUN pecl install rdkafka
 
+## install protobuf
+RUN PROTOC_ZIP=protoc-3.3.0-linux-x86_64.zip \
+    && curl -OL https://github.com/google/protobuf/releases/download/v3.3.0/$PROTOC_ZIP \
+    && unzip -o $PROTOC_ZIP -d /usr/local bin/protoc \
+    && rm -f $PROTOC_ZIP
+
+RUN pecl install protobuf-3.6.1
+
 COPY ./php.ini /usr/local/etc/php
 
 ADD . /var/www/app
 WORKDIR /var/www/app
+
+RUN protoc --php_out=protobuf/build protobuf/src/*.proto
  
 RUN composer install --no-dev\
     && composer dump-autoload -o \

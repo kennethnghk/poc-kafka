@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use RdKafka;
 use App\Core\Models\Kafka;
+use ProtoMsg\Location;
 
 class Producer extends Command
 {
@@ -39,6 +40,17 @@ class Producer extends Command
      */
     public function handle()
     {
+        // serialize
+        $location = new Location();
+        $location->setName("Hong Kong");
+        $location->setAge(100);
+        $data = $location->serializeToString();
+
+        // deserialize
+        $protomsg = new Location();
+        $protomsg->mergeFromString($data);
+        dd($protomsg->getName());
+
         $rk = new RdKafka\Producer();
         $rk->setLogLevel(LOG_DEBUG);
         $rk->addBrokers(config("kafka.brokers"));
