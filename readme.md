@@ -24,3 +24,17 @@ docker exec -it [containerId] /bin/bash
 ```sh
 $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zoo1:2181
 ```
+
+## Producer and consumer
+
+Inside the web app, you can run producer (publish message) and consumer (listner) by Laravel artisan commands:
+
+Producer:
+```sh
+php artisan producer
+```
+
+Consumer:
+```sh
+php artisan consumer
+```
