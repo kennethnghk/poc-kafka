@@ -36,7 +36,17 @@ RUN wget https://github.com/swoole/swoole-src/archive/v4.2.5.tar.gz -O swoole.ta
     ) \
     && rm -r swoole \
     && docker-php-ext-enable swoole
- 
+
+## install librdkafka
+RUN git clone https://github.com/edenhill/librdkafka.git \
+    && cd librdkafka \
+    && ./configure \
+    && make && make install
+
+RUN pecl install rdkafka
+
+COPY ./php.ini /usr/local/etc/php
+
 ADD . /var/www/app
 WORKDIR /var/www/app
  

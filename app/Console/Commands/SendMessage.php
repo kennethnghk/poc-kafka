@@ -3,8 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+use RdKafka;
 
 class SendMessage extends Command
 {
@@ -39,38 +38,10 @@ class SendMessage extends Command
      */
     public function handle()
     {
-        $logger = new Logger('my_logger');
-        $logger->pushHandler(new StreamHandler('storage/logs/test.log', Logger::DEBUG));
+        $rk = new RdKafka\Producer();
+        $rk->setLogLevel(LOG_DEBUG);
+        $rk->addBrokers("kafka1:9092");
 
-        $config = \Kafka\ProducerConfig::getInstance();
-        $config->setMetadataRefreshIntervalMs(10000);
-        $config->setMetadataBrokerList('127.0.0.1:9092');
-        $config->setBrokerVersion('1.0.0');
-        $config->setRequiredAck(1);
-        $config->setIsAsyn(false);
-        $config->setProduceInterval(500);
-        $producer = new \Kafka\Producer(
-            function() {
-                return [
-                    [
-                        'topic' => 'test',
-                        'value' => 'test....message.',
-                        'key' => 'testkey',
-                    ],
-                ];
-            }
-        );
-
-        $producer->setLogger($logger);
-        $producer->success(function($result) {
-            print "at success";
-            var_dump($result);
-        });
-        $producer->error(function($errorCode) {
-            print "at error ".$errorCode;
-                // var_dump($errorCode);
-        });
-        $producer->send(true);
-        
+        $topic = $rk->newTopic("testTopic");        
     }
 }
