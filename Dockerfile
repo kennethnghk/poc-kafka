@@ -58,7 +58,8 @@ COPY ./php.ini /usr/local/etc/php
 ADD . /var/www/app
 WORKDIR /var/www/app
 
-RUN protoc --php_out=protobuf/build protobuf/src/*.proto
+RUN cd /var/www/app && mkdir -p protobuf/build \
+    && protoc --php_out=protobuf/build protobuf/src/*.proto
  
 RUN composer install --no-dev\
     && composer dump-autoload -o \
