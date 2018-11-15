@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use RdKafka;
 use App\Core\Models\Kafka;
+use ProtoMsg\EventEnvelope;
+use ProtoMsg\Location;
 
 class Consumer extends Command
 {
@@ -72,6 +74,12 @@ class Consumer extends Command
             switch ($message->err) {
                 case RD_KAFKA_RESP_ERR_NO_ERROR:
                     echo sprintf("Received topic=[%s], message=[%s], offset=[%s]", $message->topic_name, $message->payload, $message->offset)."\n";
+                    $event = new EventEnvelope();
+                    $event->mergeFromString($message->payload);
+                    
+                    if ($event->getBody() === "location") {
+                        echo sprintf("Location lat=[%s], lng=[%s]\n", $event->getLocation()->getLat(), $event->getLocation()->getLng());
+                    }
                     break;
                 case RD_KAFKA_RESP_ERR__PARTITION_EOF:
                     echo "No more messages; will wait for more\n";

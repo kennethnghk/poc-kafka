@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use RdKafka;
 use App\Core\Models\Kafka;
 use ProtoMsg\Location;
+use ProtoMsg\EventEnvelope;
 
 class Producer extends Command
 {
@@ -42,27 +43,21 @@ class Producer extends Command
     {
         // serialize
         $location = new Location();
-        $location->setName("Hong Kong");
-        $location->setAge(100);
-        $data = $location->serializeToString();
+        $location->setLat(22.28552);
+        $location->setLng(114.15769);
 
-        // deserialize
-        $protomsg = new Location();
-        $protomsg->mergeFromString($data);
-        dd($protomsg->getName());
+        $event = new EventEnvelope();
+        $event->setTs(time());
+        $event->setLocation($location);
+        $data = $event->serializeToString();
 
         $rk = new RdKafka\Producer();
         $rk->setLogLevel(LOG_DEBUG);
         $rk->addBrokers(config("kafka.brokers"));
 
-        $topic = $rk->newTopic(Kafka::TOPIC_DEFAULT);    
-
-        for ($i = 0; $i < 10; $i++) {
-            $message = "message ".$i;
-            $topic->produce(RD_KAFKA_PARTITION_UA, 0, $message);
-            echo sprintf("sending messaage s=[%s]", $message)."\n";
-            $rk->poll(0);
-        }
+        $topic = $rk->newTopic(Kafka::TOPIC_DEFAULT);  
+        $topic->produce(RD_KAFKA_PARTITION_UA, 0 , $data);
+        $rk->poll(0);
         
         while ($rk->getOutQLen() > 0) {
             $rk->poll(50);

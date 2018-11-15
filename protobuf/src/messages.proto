@@ -1,0 +1,16 @@
+syntax = "proto3";
+package ProtoMsg;
+
+message Location {
+  int32 ts = 1;
+  float lat = 2;
+  float lng = 3;
+}
+
+message EventEnvelope {
+  int32 ts = 1;
+  
+  oneof body {
+      Location location = 1001;
+  }
+}
