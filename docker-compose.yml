@@ -24,6 +24,11 @@ services:
       ZOO_MY_ID: 1
       SERVERS: zoo1
 
+  spark:
+    image: gettyimages/spark
+    ports:
+      - "4040:4040"
+
   webapp:
     build: .
     ports:
